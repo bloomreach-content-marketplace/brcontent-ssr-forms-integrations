@@ -72,7 +72,7 @@ export default class CmsField extends React.Component<CmsFieldProperties, CmsFie
         const {items, editMode} = this.state;
         return (
             <UiField
-                key={`${(items && items.length > 0) ? items.map(value => value.content.name).join('-') : Math.floor(Math.random() * 100)}`}
+                key={`${(items && items.length > 0) ? items.map(value => value.content.id).join('-') : Math.floor(Math.random() * 100)}`}
                 items={items}
                 onChange={(items) => this.setState({items: items}, () => this.props.ui.document.field.setValue(JSON.stringify(items)))}
                 editMode={editMode}

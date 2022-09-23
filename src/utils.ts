@@ -19,8 +19,7 @@ export const userLocale =
 
 
 export interface UiConfig {
-    jwtToken?: string
-    endpoint: string
+    apiKey: string
 }
 
 export const itemData: any[] =

@@ -11,7 +11,7 @@ interface DialogState {
 
 interface DialogProperties {
     onOk: (items: Array<any>) => void
-    token: string
+    apiKey: string
 }
 
 export default class UiDialog extends React.Component<DialogProperties, DialogState> {
@@ -26,8 +26,8 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
     }
 
     componentDidMount() {
-        axios.get(`https://api.typeform.com/forms?page_size=200`, this.props.token ? {headers: {'Authorization': `Bearer ${this.props.token}`} as Record<string, string>} : {}).then(response => this.setState({
-            items: response.data.items,
+        axios.get(`https://api.jotform.com/user/forms?limit=1000&apiKey=${this.props.apiKey}`).then(response => this.setState({
+            items: response.data.content,
             isLoading: false
         }));
     }
@@ -62,11 +62,18 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
                     unmountOnExit>
                     <CircularProgress/>
                 </Fade> : <List>
-                    {items.map((item, index) => {
+                    {items && items.map((item, index) => {
                             return (
                                 <ListItem sx={{width: 'auto', display: 'inline-block'}} key={item.name}>
                                     <DialogItem item={item}
-                                                onSelected={(itemSelected) => this.props.onOk([{content:itemSelected, embed:btoa(`<script src="https://cdn.form.io/formiojs/formio.embed.js?src=https://mohmrdooyjchssz.form.io/${itemSelected.name}&libs=true"></script>`)}])}/>
+                                                onSelected={(itemSelected) => {
+                                                    axios.get(`https://api.jotform.com/form/${itemSelected.id}/source?apiKey=${this.props.apiKey}`).then(response => {
+                                                        this.props.onOk([{
+                                                            content: itemSelected,
+                                                            embed: btoa(response.data.content)
+                                                        }])
+                                                    })
+                                                }}/>
                                 </ListItem>
                             )
                         }
@@ -78,11 +85,13 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
 
 
     onKeyWordChange(keyword: string) {
-        axios.get(`https://api.typeform.com/forms?page_size=200&&search=${keyword}`, this.props.token ? {headers: {'Authorization': `Bearer ${this.props.token}`} as Record<string, string>} : {}).then(response => this.setState({
-            items: response.data.items,
+        axios.get(`https://api.jotform.com/user/forms?limit=1000&apiKey=${this.props.apiKey}`).then(response => this.setState({
+            items: response.data.content.filter((item: any) => item.title.toLowerCase().startsWith(keyword.toLowerCase())),
             isLoading: false
         }));
     }
+
+
 }
 
 
