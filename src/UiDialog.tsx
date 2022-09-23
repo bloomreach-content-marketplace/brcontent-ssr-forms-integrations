@@ -11,7 +11,6 @@ interface DialogState {
 
 interface DialogProperties {
     onOk: (items: Array<any>) => void
-    items: Array<any>
     endpoint: string
     jwtToken?: string
 }
@@ -64,11 +63,11 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
                     unmountOnExit>
                     <CircularProgress/>
                 </Fade> : <List>
-                    {items.map((item, id) => {
+                    {items.map((item, index) => {
                             return (
                                 <ListItem sx={{width: 'auto', display: 'inline-block'}} key={item.name}>
                                     <DialogItem item={item}
-                                                onSelected={(itemSelected) => this.props.onOk([itemSelected])}/>
+                                                onSelected={(itemSelected) => this.props.onOk([{content:itemSelected, embed:btoa(`<script src="https://cdn.form.io/formiojs/formio.embed.js?src=https://mohmrdooyjchssz.form.io/${itemSelected.name}&libs=true"></script>`)}])}/>
                                 </ListItem>
                             )
                         }

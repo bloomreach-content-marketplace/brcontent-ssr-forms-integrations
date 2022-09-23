@@ -38,7 +38,7 @@ async function render() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/dialog" element={<UiDialog jwtToken={''} endpoint={'https://mohmrdooyjchssz.form.io'}  onOk={items => console.log('onOk', items)}
-                                                              items={itemDataList} />}/>
+                                                              />}/>
                     <Route path="/"
                            element={<UiField items={itemData} onChange={items => console.log('onChange', items)}
                                              editMode={false}

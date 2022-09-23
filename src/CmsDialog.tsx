@@ -45,7 +45,7 @@ export default class CmsDialog extends React.Component<CmsDialogProperties, CmsD
     render() {
         const {items} = this.state;
         return (
-            <UiDialog key={items.length} items={items}
+            <UiDialog key={items.length}
                       onOk={items => {
                           this.props.ui.dialog.close(items)
                       }} endpoint={this.config.endpoint} jwtToken={this.config?.jwtToken}/>);
