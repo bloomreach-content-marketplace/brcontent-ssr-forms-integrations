@@ -37,7 +37,7 @@ async function render() {
         const routing = (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/dialog" element={<UiDialog jwtToken={''} endpoint={'https://mohmrdooyjchssz.form.io'}  onOk={items => console.log('onOk', items)}
+                    <Route path="/dialog" element={<UiDialog token={'tfp_FppRtRWs1b3JeD4FrAV7WJ6XdfPxe7HDtNUGsF4849Z_hkny5Dy4rDHH'}  onOk={items => console.log('onOk', items)}
                                                               />}/>
                     <Route path="/"
                            element={<UiField items={itemData} onChange={items => console.log('onChange', items)}

@@ -11,8 +11,7 @@ interface DialogState {
 
 interface DialogProperties {
     onOk: (items: Array<any>) => void
-    endpoint: string
-    jwtToken?: string
+    token: string
 }
 
 export default class UiDialog extends React.Component<DialogProperties, DialogState> {
@@ -27,8 +26,8 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
     }
 
     componentDidMount() {
-        axios.get(`${this.props.endpoint}/form?type=form`, this.props.jwtToken ? {headers: {'x-jwt-token': this.props.jwtToken} as Record<string, string>} : {}).then(response => this.setState({
-            items: response.data,
+        axios.get(`https://api.typeform.com/forms?page_size=200`, this.props.token ? {headers: {'Authorization': `Bearer ${this.props.token}`} as Record<string, string>} : {}).then(response => this.setState({
+            items: response.data.items,
             isLoading: false
         }));
     }
@@ -79,10 +78,9 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
 
 
     onKeyWordChange(keyword: string) {
-        axios.get(`${this.props.endpoint}/form?type=form&title__regex=${keyword ?? ''}`, this.props.jwtToken ? {headers: {'x-jwt-token': this.props.jwtToken} as Record<string, string>} : {}).then(response => this.setState({
-            items: response.data,
-            isLoading: false,
-            keyword: keyword
+        axios.get(`https://api.typeform.com/forms?page_size=200&&search=${keyword}`, this.props.token ? {headers: {'Authorization': `Bearer ${this.props.token}`} as Record<string, string>} : {}).then(response => this.setState({
+            items: response.data.items,
+            isLoading: false
         }));
     }
 }
