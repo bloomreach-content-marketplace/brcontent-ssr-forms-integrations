@@ -2,6 +2,7 @@ import React from "react";
 import {AppBar, CircularProgress, Dialog, DialogContent, Fade, List, ListItem, TextField, Toolbar} from "@mui/material";
 import DialogItem from "./DialogItem";
 import axios from "axios";
+import {itemData} from "./utils";
 
 interface DialogState {
     items: Array<any>
@@ -27,7 +28,7 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
 
     componentDidMount() {
         axios.get(`/api/forms?token=${this.props.token}`).then(response => this.setState({
-            items: response.data.items,
+            items: response.data,
             isLoading: false
         }));
     }
@@ -69,7 +70,14 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
                                                 onSelected={(itemSelected) => {
                                                     this.props.onOk([{
                                                         content: itemSelected,
-                                                        embed: btoa(unescape(encodeURIComponent(`<div data-tf-widget="${itemSelected.id}"></div><script src="//embed.typeform.com/next/embed.js"></script>`)))
+                                                        embed: btoa(unescape(encodeURIComponent(`<div formsappId="${itemSelected._id}"></div>
+			<script src="https://my.forms.app/static/iframe.js" type="text/javascript"></script>
+			<script>
+				new formsapp('${itemSelected._id}', {
+					width: '100%',
+					height: 'formHeight'
+				});
+			</script>`)))
                                                     }])
                                                 }}/>
                                 </ListItem>
@@ -83,8 +91,8 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
 
 
     onKeyWordChange(keyword: string) {
-        axios.get(`/api/forms?token=${this.props.token}&query=${keyword}`).then(response => this.setState({
-            items: response.data.items,
+        axios.get(`/api/forms?token=${this.props.token}`).then(response => this.setState({
+            items: response.data.filter((item: any) => item.title.toLowerCase().startsWith(keyword.toLowerCase())),
             isLoading: false
         }));
     }
