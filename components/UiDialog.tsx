@@ -11,7 +11,7 @@ interface DialogState {
 
 interface DialogProperties {
     onOk: (items: Array<any>) => void
-    apiKey: string
+    token: string
 }
 
 export default class UiDialog extends React.Component<DialogProperties, DialogState> {
@@ -26,8 +26,8 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
     }
 
     componentDidMount() {
-        axios.get(`https://api.jotform.com/user/forms?limit=1000&apiKey=${this.props.apiKey}`).then(response => this.setState({
-            items: response.data.content,
+        axios.get(`/api/forms?token=${this.props.token}`).then(response => this.setState({
+            items: response.data.items,
             isLoading: false
         }));
     }
@@ -64,15 +64,13 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
                 </Fade> : <List>
                     {items && items.map((item, index) => {
                             return (
-                                <ListItem sx={{width: 'auto', display: 'inline-block'}} key={item.name}>
+                                <ListItem sx={{width: 'auto', display: 'inline-block'}} key={item.title}>
                                     <DialogItem item={item}
                                                 onSelected={(itemSelected) => {
-                                                    axios.get(`https://api.jotform.com/form/${itemSelected.id}/source?apiKey=${this.props.apiKey}`).then(response => {
-                                                        this.props.onOk([{
-                                                            content: itemSelected,
-                                                            embed: btoa(response.data.content)
-                                                        }])
-                                                    })
+                                                    this.props.onOk([{
+                                                        content: itemSelected,
+                                                        embed: btoa(unescape(encodeURIComponent(`<div data-tf-widget="${itemSelected.id}"></div><script src="//embed.typeform.com/next/embed.js"></script>`)))
+                                                    }])
                                                 }}/>
                                 </ListItem>
                             )
@@ -85,8 +83,8 @@ export default class UiDialog extends React.Component<DialogProperties, DialogSt
 
 
     onKeyWordChange(keyword: string) {
-        axios.get(`https://api.jotform.com/user/forms?limit=1000&apiKey=${this.props.apiKey}`).then(response => this.setState({
-            items: response.data.content.filter((item: any) => item.title.toLowerCase().startsWith(keyword.toLowerCase())),
+        axios.get(`/api/forms?token=${this.props.token}&query=${keyword}`).then(response => this.setState({
+            items: response.data.items,
             isLoading: false
         }));
     }

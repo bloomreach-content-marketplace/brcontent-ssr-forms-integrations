@@ -16,7 +16,7 @@ export default async function handler(
         // @ts-ignore
         res.status(403).json('TOKEN NOT PROVIDED');
     } else {
-        const response = await axios.get(`https://api.typeform.com/forms${query ? `?search=${query}` : ''}`, {headers: {"Authorization": `Bearer ${token}`}})
+        const response = await axios.get(`https://api.typeform.com/forms${query ? `?search=${query}&` : '?'}page_size=200`, {headers: {"Authorization": `Bearer ${token}`}})
         res.status(response.status).json(response.data)
     }
 

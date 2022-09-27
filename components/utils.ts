@@ -19,7 +19,7 @@ export const userLocale =
 
 
 export interface UiConfig {
-    apiKey: string
+    token: string
 }
 
 export const itemData: any[] =

@@ -2,6 +2,7 @@ import React from "react";
 import {UiConfig} from "./utils";
 import {UiScope} from "@bloomreach/ui-extension";
 import UiDialog from "./UiDialog";
+import {NoSsr} from "@mui/material";
 
 interface CmsDialogState {
     items: Array<any>
@@ -45,10 +46,12 @@ export default class CmsDialog extends React.Component<CmsDialogProperties, CmsD
     render() {
         const {items} = this.state;
         return (
-            <UiDialog key={items.length}
-                      onOk={items => {
-                          this.props.ui.dialog.close(items)
-                      }} apiKey={this.config.apiKey}/>);
+
+                <UiDialog key={items.length}
+                          onOk={items => {
+                              this.props.ui.dialog.close(items)
+                          }} token={this.config.token}/>
+        );
     }
 }
 

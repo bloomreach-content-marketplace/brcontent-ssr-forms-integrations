@@ -1,22 +1,28 @@
 import type {NextPage} from 'next'
-import UiField from "../components/UiField";
 import UiExtension from "@bloomreach/ui-extension";
+import React, {useEffect, useState} from "react";
+import {CircularProgress, NoSsr} from "@mui/material";
 import CmsField from "../components/CmsField";
-import {useState} from "react";
 
 const Field: NextPage = () => {
 
-    const [component, setComponent] = useState(<UiField onChange={items => console.log(items)}
-                                                        onOpenDialog={items => console.log(items)} editMode={false}
-                                                        items={[]}/>)
-    // try {
-    //     UiExtension.register().then(ui => {
-    //         setComponent(<CmsField ui={ui}/>)
-    //     });
-    // } catch (e: any) {
-    //     console.error(e.message)
-    // }
-    return component;
+    const [component, setComponent] = useState(<CircularProgress/>)
+
+
+    useEffect(() => {
+        try {
+            UiExtension.register().then(ui => {
+                setComponent(<CmsField ui={ui}/>);
+            });
+        } catch (e: any) {
+            console.error(e.message)
+        }
+    }, [])
+
+
+    return <NoSsr>{component}</NoSsr>
+
+
 }
 
 export default Field
