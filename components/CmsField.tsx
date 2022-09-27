@@ -46,7 +46,6 @@ export default class CmsField extends React.Component<CmsFieldProperties, CmsFie
     }
 
     async openDialog(ui: UiScope) {
-        console.log('open dialog...')
         try {
 
             const dialogOptions: DialogProperties = {

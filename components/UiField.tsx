@@ -41,7 +41,6 @@ export default class UiField extends React.Component<FieldProperties, FieldState
                                     <Button size={"small"} sx={{display: editMode ? 'block' : 'none'}}
                                             variant="outlined"
                                             onClick={() => {
-                                                console.log('on click...')
                                                 this.props.onOpenDialog(items)
                                             }}>Select</Button>
                                 </ListItem>
